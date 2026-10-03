@@ -91,7 +91,7 @@ public class BoardAgent : Agent
             tiltController = GetComponentInParent<TiltController>();
             if (tiltController == null)
             {
-                tiltController = Object.FindObjectOfType<TiltController>();
+                tiltController = Object.FindAnyObjectByType<TiltController>();
             }
         }
     }
@@ -129,7 +129,7 @@ public class BoardAgent : Agent
             tiltController = GetComponentInParent<TiltController>();
             if (tiltController == null)
             {
-                tiltController = Object.FindObjectOfType<TiltController>();
+                tiltController = Object.FindAnyObjectByType<TiltController>();
             }
         }
         if (tiltController != null)
@@ -156,7 +156,7 @@ public class BoardAgent : Agent
         {
             Vector3 resetPosition = transform.TransformPoint(initialMarbleLocalPos + randomOffset);
             marble.position = resetPosition;
-            marbleRb.velocity = Vector3.zero;
+            marbleRb.linearVelocity = Vector3.zero;
             marbleRb.angularVelocity = Vector3.zero;
         }
         else

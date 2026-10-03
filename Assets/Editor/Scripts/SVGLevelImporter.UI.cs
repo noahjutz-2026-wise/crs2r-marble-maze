@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using Unity.MLAgents.Policies;
 using System.IO;
-using Unity.Barracuda;
+using Unity.InferenceEngine;
 
 public partial class SVGLevelImporter : EditorWindow
 {
@@ -53,19 +53,19 @@ public partial class SVGLevelImporter : EditorWindow
         }
     }
 
-    private static void TryAssignPhysicByName(ref PhysicMaterial field, string name)
+    private static void TryAssignPhysicByName(ref PhysicsMaterial field, string name)
     {
         if (field != null) return;
-        field = FindAssetByExactName<PhysicMaterial>(name);
+        field = FindAssetByExactName<PhysicsMaterial>(name);
     }
 
-    private static void TryAssignPhysicByNames(ref PhysicMaterial field, params string[] names)
+    private static void TryAssignPhysicByNames(ref PhysicsMaterial field, params string[] names)
     {
         if (field != null || names == null) return;
         for (int i = 0; i < names.Length; i++)
         {
             if (string.IsNullOrEmpty(names[i])) continue;
-            var pm = FindAssetByExactName<PhysicMaterial>(names[i]);
+            var pm = FindAssetByExactName<PhysicsMaterial>(names[i]);
             if (pm != null)
             {
                 field = pm;
@@ -185,14 +185,14 @@ public partial class SVGLevelImporter : EditorWindow
 
     private void RestoreDefaultPhysicMaterials()
     {
-        floorPhysMaterial = FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysFloor[0])
-            ?? FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysFloor.Length > 1 ? SVGImporterDefaults.Names.PhysFloor[1] : null);
-        wallPhysMaterial = FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysWall[0])
-            ?? FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysWall.Length > 1 ? SVGImporterDefaults.Names.PhysWall[1] : null);
-        marblePhysMaterial = FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysMarbleArray[0])
-            ?? FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysMarble);
-        framePhysMaterial = FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysFrame[0])
-            ?? FindAssetByExactName<PhysicMaterial>(SVGImporterDefaults.Names.PhysFrame.Length > 1 ? SVGImporterDefaults.Names.PhysFrame[1] : null);
+        floorPhysMaterial = FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysFloor[0])
+            ?? FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysFloor.Length > 1 ? SVGImporterDefaults.Names.PhysFloor[1] : null);
+        wallPhysMaterial = FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysWall[0])
+            ?? FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysWall.Length > 1 ? SVGImporterDefaults.Names.PhysWall[1] : null);
+        marblePhysMaterial = FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysMarbleArray[0])
+            ?? FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysMarble);
+        framePhysMaterial = FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysFrame[0])
+            ?? FindAssetByExactName<PhysicsMaterial>(SVGImporterDefaults.Names.PhysFrame.Length > 1 ? SVGImporterDefaults.Names.PhysFrame[1] : null);
     }
 
     private void RestoreDefaultGeometry()
@@ -494,12 +494,12 @@ public partial class SVGLevelImporter : EditorWindow
         }
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Physics Materials", EditorStyles.boldLabel);
-		floorPhysMaterial = (PhysicMaterial)EditorGUILayout.ObjectField(T("Floor Physics", "Physics material applied to floor colliders."), floorPhysMaterial, typeof(PhysicMaterial), false);
-		wallPhysMaterial = (PhysicMaterial)EditorGUILayout.ObjectField(T("Wall Physics", "Physics material applied to wall colliders."), wallPhysMaterial, typeof(PhysicMaterial), false);
-		marblePhysMaterial = (PhysicMaterial)EditorGUILayout.ObjectField(T("Marble Physics", "Physics material applied to the marble collider."), marblePhysMaterial, typeof(PhysicMaterial), false);
+		floorPhysMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField(T("Floor Physics", "Physics material applied to floor colliders."), floorPhysMaterial, typeof(PhysicsMaterial), false);
+		wallPhysMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField(T("Wall Physics", "Physics material applied to wall colliders."), wallPhysMaterial, typeof(PhysicsMaterial), false);
+		marblePhysMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField(T("Marble Physics", "Physics material applied to the marble collider."), marblePhysMaterial, typeof(PhysicsMaterial), false);
         using (new EditorGUI.DisabledScope(!createTiltRig))
         {
-			framePhysMaterial = (PhysicMaterial)EditorGUILayout.ObjectField(T("Frame Physics", "Physics material applied to frame beams (colliders)."), framePhysMaterial, typeof(PhysicMaterial), false);
+			framePhysMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField(T("Frame Physics", "Physics material applied to frame beams (colliders)."), framePhysMaterial, typeof(PhysicsMaterial), false);
         }
         using (new EditorGUILayout.HorizontalScope())
         {
@@ -555,7 +555,7 @@ public partial class SVGLevelImporter : EditorWindow
         {
             behaviorName = EditorGUILayout.TextField(T("Name", "Unique name for the ML-Agents behavior."), behaviorName);
             behaviorTeamId = EditorGUILayout.IntField(T("Team ID", "Team identifier for multi-agent setups."), behaviorTeamId);
-            behaviorModel = (NNModel)EditorGUILayout.ObjectField(T("Model", "Optional NN Model to run in Inference mode."), behaviorModel, typeof(NNModel), false);
+            behaviorModel = (ModelAsset)EditorGUILayout.ObjectField(T("Model", "Optional NN Model to run in Inference mode."), behaviorModel, typeof(ModelAsset), false);
             behaviorType = (BehaviorType)EditorGUILayout.EnumPopup(T("Type", "Training/Inference mode for this behavior."), behaviorType);
             inferenceDevice = (InferenceDevice)EditorGUILayout.EnumPopup(T("Device", "Inference device for the model."), inferenceDevice);
             useChildSensors = EditorGUILayout.Toggle(T("Child Sensors", "Include sensors on child objects in observations."), useChildSensors);

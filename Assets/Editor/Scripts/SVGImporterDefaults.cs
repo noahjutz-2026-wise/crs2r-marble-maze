@@ -1,6 +1,6 @@
 using UnityEngine;
 using Unity.MLAgents.Policies;
-using Unity.Barracuda;
+using Unity.InferenceEngine;
 using Unity.MLAgents;
 
 /// <summary>

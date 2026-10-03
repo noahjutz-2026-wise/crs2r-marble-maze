@@ -35,7 +35,7 @@ public class HoleTrigger : MonoBehaviour
                 manualSpawnPosition = manualMarble.position;
             }
             // Try to find the tilt controller to reset the rig
-            tiltController = Object.FindObjectOfType<TiltController>();
+            tiltController = Object.FindAnyObjectByType<TiltController>();
         }
     }
     /// <summary>
@@ -56,7 +56,7 @@ public class HoleTrigger : MonoBehaviour
             manualMarble.rotation = Quaternion.identity;
             if (manualMarbleRb != null)
             {
-                manualMarbleRb.velocity = Vector3.zero;
+                manualMarbleRb.linearVelocity = Vector3.zero;
                 manualMarbleRb.angularVelocity = Vector3.zero;
             }
             return;

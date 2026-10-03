@@ -1,5 +1,5 @@
 using UnityEngine;
-using Unity.Barracuda;
+using Unity.InferenceEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 
@@ -144,13 +144,13 @@ public class SvgImportSettings : ScriptableObject
     // Physic materials
     [Header("Physic Materials")]
     [Tooltip("Physics material applied to floor colliders.")]
-    [InspectorName("Floor Physics")] public PhysicMaterial floorPhysMaterial;
+    [InspectorName("Floor Physics")] public PhysicsMaterial floorPhysMaterial;
     [Tooltip("Physics material applied to wall colliders.")]
-    [InspectorName("Wall Physics")] public PhysicMaterial wallPhysMaterial;
+    [InspectorName("Wall Physics")] public PhysicsMaterial wallPhysMaterial;
     [Tooltip("Physics material applied to the marble collider.")]
-    [InspectorName("Marble Physics")] public PhysicMaterial marblePhysMaterial;
+    [InspectorName("Marble Physics")] public PhysicsMaterial marblePhysMaterial;
     [Tooltip("Physics material applied to frame beams (colliders).")]
-    [InspectorName("Frame Physics")] public PhysicMaterial framePhysMaterial;
+    [InspectorName("Frame Physics")] public PhysicsMaterial framePhysMaterial;
 
     // Marble physics
     [Header("Marble Physics")]
@@ -220,7 +220,7 @@ public class SvgImportSettings : ScriptableObject
     [Tooltip("If enabled, actions are applied every frame between decisions.")]
     [InspectorName("Act Between")] public bool takeActionsBetweenDecisions = SVGImporterDefaults.Values.TakeActionsBetweenDecisions;
     [Tooltip("Optional NNModel for inference.")]
-    [InspectorName("Model")] public NNModel behaviorModel;
+    [InspectorName("Model")] public ModelAsset behaviorModel;
     [Tooltip("Inference device for the model.")]
     [InspectorName("Device")] public InferenceDevice inferenceDevice = SVGImporterDefaults.Values.InferenceDevice;
 

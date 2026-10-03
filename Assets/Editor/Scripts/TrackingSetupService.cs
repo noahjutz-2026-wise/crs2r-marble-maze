@@ -465,7 +465,7 @@ public static class TrackingSetupService
                 // Wire references if present
                 var agent = levelRoot.GetComponent<BoardAgent>();
                 if (agent != null) epHud.agent = agent;
-                var tilt = Object.FindObjectOfType<TiltController>();
+                var tilt = Object.FindAnyObjectByType<TiltController>();
                 if (tilt != null) epHud.tiltController = tilt;
             }
             if (options.showDisplay && trackingCam != null)

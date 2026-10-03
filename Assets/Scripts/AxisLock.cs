@@ -28,8 +28,8 @@ public class AxisLock : MonoBehaviour
         {
             if (!checkedForDrivers)
             {
-                var rig = FindObjectOfType<GimbalRig>();
-                var tc = FindObjectOfType<TiltController>();
+                var rig = FindAnyObjectByType<GimbalRig>();
+                var tc = FindAnyObjectByType<TiltController>();
                 driversPresent = (rig != null || tc != null);
                 checkedForDrivers = true;
             }

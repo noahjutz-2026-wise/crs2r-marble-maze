@@ -11,7 +11,7 @@ using UnityEngine.AI;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Actuators;
-using Unity.Barracuda;
+using Unity.InferenceEngine;
 
 public partial class SVGLevelImporter : EditorWindow
 {
@@ -81,10 +81,10 @@ public partial class SVGLevelImporter : EditorWindow
     private Material trackingMarkerMaterial; // user-selectable tracking marker material
     private Material frameMaterial;
 
-    private PhysicMaterial floorPhysMaterial;
-    private PhysicMaterial wallPhysMaterial;
-    private PhysicMaterial marblePhysMaterial;
-    private PhysicMaterial framePhysMaterial;
+    private PhysicsMaterial floorPhysMaterial;
+    private PhysicsMaterial wallPhysMaterial;
+    private PhysicsMaterial marblePhysMaterial;
+    private PhysicsMaterial framePhysMaterial;
 
    
     // Tracking & camera UI
@@ -143,7 +143,7 @@ public partial class SVGLevelImporter : EditorWindow
     private int vectorObservationSize = SVGImporterDefaults.Values.VectorObservationSize;
     private int continuousActionSize = SVGImporterDefaults.Values.ContinuousActionSize;
     private int stackedVectors = SVGImporterDefaults.Values.StackedVectors;
-    private NNModel behaviorModel;
+    private ModelAsset behaviorModel;
     private InferenceDevice inferenceDevice = SVGImporterDefaults.Values.InferenceDevice;
    
     private int decisionPeriod = SVGImporterDefaults.Values.DecisionPeriod;
@@ -830,8 +830,8 @@ public partial class SVGLevelImporter : EditorWindow
 
                     var rb = marker.AddComponent<Rigidbody>();
                     rb.mass = marbleMass;
-                    rb.drag = marbleDrag;
-                    rb.angularDrag = marbleAngularDrag;
+                    rb.linearDamping = marbleDrag;
+                    rb.angularDamping = marbleAngularDrag;
                     rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     // Re-enable interpolation for smoother visual response of the marble
                     rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -1162,7 +1162,7 @@ public partial class SVGLevelImporter : EditorWindow
             // Ensure TiltController (rig) is enabled so Z-tilt is applied via the gimbal
             try
             {
-                var tc = UnityEngine.Object.FindObjectOfType<TiltController>();
+                var tc = UnityEngine.Object.FindAnyObjectByType<TiltController>();
                 if (tc != null) tc.enabled = true;
             }
             catch (System.Exception ex)
