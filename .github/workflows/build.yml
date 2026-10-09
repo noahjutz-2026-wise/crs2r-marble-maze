@@ -55,3 +55,27 @@ jobs:
       - name: Return license
         uses: game-ci/unity-return-license@v2
         if: always()
+      - name: Create Dockerfile
+        run: |
+          cat << 'EOF' > Dockerfile
+          FROM ubuntu:24.04
+          WORKDIR /app
+          COPY build/StandaloneLinux64/ .
+          RUN chmod +x ./*.x86_64
+          CMD ["sh", "-c", "exec ./*.x86_64 -batchmode -nographics"]
+          EXPOSE 5005
+          EOF
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
